@@ -1,0 +1,25 @@
+-- default to beginning of time
+SET 'auto.offset.reset'='earliest';
+
+-- create table
+CREATE TABLE tb_conjunto_vereadores AS
+  SELECT    
+    con_id,
+    latest_by_offset(con_sigla) as con_sigla,
+    latest_by_offset(con_maximo) as con_maximo,
+    latest_by_offset(ut_id) as ut_id,
+    latest_by_offset(ini_nome) as ini_nome,
+    latest_by_offset(ini_ativa) as ini_ativa,
+    latest_by_offset(tin_id) as tin_id,
+    latest_by_offset(versao) as versao,
+    latest_by_offset(ini_codigo_prefeitura) as ini_codigo_prefeitura,
+    latest_by_offset(con_descricao) as con_descricao,
+    latest_by_offset(con_site_ordem) as con_site_ordem,
+    latest_by_offset(con_email) as con_email
+  FROM      
+    st_conjunto_vereadores_rekeyed
+  GROUP BY
+    con_id
+  EMIT CHANGES;
+
+        

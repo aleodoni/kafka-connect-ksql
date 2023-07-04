@@ -1,0 +1,37 @@
+-- default to beginning of time
+SET 'auto.offset.reset'='earliest';
+
+-- create table
+CREATE TABLE tb_reuniao_comissao AS
+  SELECT    
+    rec_id,
+    latest_by_offset(con_id) as con_id,
+    latest_by_offset(rec_tipo_reuniao) as rec_tipo_reuniao,
+    latest_by_offset(rec_numero) as rec_numero,
+    latest_by_offset(versao) as versao,
+    latest_by_offset(rec_data) as rec_data
+  FROM      
+    st_reuniao_comissao_rekeyed
+  GROUP BY
+    rec_id
+  EMIT CHANGES;
+
+CREATE TABLE tb_reuniao_comissao_joined_conjunto_vereadores AS
+  SELECT
+    rc.rec_id as rec_id,
+    rc.con_id as con_id,
+    rc.rec_tipo_reuniao as tipo_reuniao,
+    rc.rec_numero as rec_numero,
+    rc.rec_data as rec_data,
+    cv.con_sigla as con_sigla,
+    cv_ini_nome as ini_nome
+
+  FROM tb_reuniao_comissao rc
+  JOIN tb_conjunto_vereadores cv ON rc.con_id = cv.con_id;
+
+CREATE TABLE tb_reuniao_comissao_joined_pauta_comissao AS
+  SELECT *
+  FROM
+    tb_reuniao_comissao_joined_conjunto_vereadores pccv
+
+  JOIN tb_reuniao_comissao rc ON rc.rec_id = pccv.rec_id;

@@ -1,0 +1,18 @@
+-- default to beginning of time
+SET 'auto.offset.reset'='earliest';
+
+-- create table
+CREATE TABLE tb_pauta_comissao AS
+  SELECT    
+    pac_id,
+    latest_by_offset(rec_id) as rec_id,
+    latest_by_offset(pac_notificada) as pac_notificada,
+    latest_by_offset(pac_liberada) as pac_liberada,
+    latest_by_offset(versao) as versao
+  FROM      
+    st_pauta_comissao_rekeyed
+  GROUP BY
+    pac_id
+  EMIT CHANGES;
+
+        

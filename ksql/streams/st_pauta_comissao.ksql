@@ -1,0 +1,23 @@
+-- default to beginning of time
+SET 'auto.offset.reset'='earliest';
+
+-- create stream
+CREATE STREAM st_pauta_comissao
+WITH (
+  kafka_topic = 'spl.public.pauta_comissao',
+  value_format = 'avro'
+);
+
+-- create stream rekeyed
+CREATE STREAM st_pauta_comissao_rekeyed 
+WITH (
+  kafka_topic = 'pauta_comissao_keyed',
+  partitions = 1
+)
+AS 
+  SELECT 
+    * 
+  FROM 
+    st_pauta_comissao
+  PARTITION BY PAC_ID
+;
