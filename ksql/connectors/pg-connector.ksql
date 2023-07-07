@@ -3,26 +3,26 @@ SET 'auto.offset.reset'='earliest';
 
 -- create the pg connector
 CREATE SOURCE CONNECTOR debezium_spl WITH (
-'connector.class' = 'io.debezium.connector.postgresql.PostgresConnector'
-'key.converter' = 'io.confluent.connect.avro.AvroConverter'
-'value.converter' = 'io.confluent.connect.avro.AvroConverter'
-'transforms' = 'unwrap'
-'transforms.unwrap.type' = 'io.debezium.transforms.ExtractNewRecordState'
-'transforms.unwrap.delete.handling.mode' = 'drop'
-'transforms.unwrap.drop.tombstones' = 'false'
-'topic.prefix' = 'spl'
-'database.hostname' = '192.168.1.169'
-'database.port' = '5433'
-'database.user' = 'postgres'
-'database.password' = 'postgres'
-'database.dbname' = 'spl'
-'plugin.name' = 'pgoutput'
-'schema.refresh.mode' = 'columns_diff'
-'table.ignore.builtin' = 'true'
-'schema.include.list' = 'public'
-'message.key.columns' = 'spl.public.reuniao_comissao:rec_id;spl.public.pauta_comissao:pac_id;spl.public.conjunto_vereadores:con_id'
-'internal.key.converter' = 'org.apache.kafka.connect.json.JsonConverter'
-'value.converter.schema.registry.url' = 'http://schema-registry:8081'
-'internal.value.converter' = 'org.apache.kafka.connect.json.JsonConverter'
+'connector.class' = 'io.debezium.connector.postgresql.PostgresConnector',
+'key.converter' = 'io.confluent.connect.avro.AvroConverter',
+'value.converter' = 'io.confluent.connect.avro.AvroConverter',
+'transforms' = 'unwrap',
+'transforms.unwrap.type' = 'io.debezium.transforms.ExtractNewRecordState',
+'transforms.unwrap.delete.handling.mode' = 'drop',
+'transforms.unwrap.drop.tombstones' = 'false',
+'topic.prefix' = 'spl',
+'database.hostname' = '192.168.1.169',
+'database.port' = '5433',
+'database.user' = 'postgres',
+'database.password' = 'postgres',
+'database.dbname' = 'spl',
+'plugin.name' = 'pgoutput',
+'schema.refresh.mode' = 'columns_diff',
+'table.ignore.builtin' = 'true',
+'schema.include.list' = 'public',
+'message.key.columns' = 'spl.public.reuniao_comissao:rec_id;spl.public.pauta_comissao:pac_id;spl.public.conjunto_vereadores:con_id;spl.public.texto_conclusao_autor:txt_id',
+'internal.key.converter' = 'org.apache.kafka.connect.json.JsonConverter',
+'value.converter.schema.registry.url' = 'http://schema-registry:8081',
+'internal.value.converter' = 'org.apache.kafka.connect.json.JsonConverter',
 'key.converter.schema.registry.url' = 'http://schema-registry:8081'
 );

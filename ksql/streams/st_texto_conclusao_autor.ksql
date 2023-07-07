@@ -1,0 +1,23 @@
+-- default to beginning of time
+SET 'auto.offset.reset'='earliest';
+
+-- create stream
+CREATE STREAM st_texto_conclusao_autor
+WITH (
+  kafka_topic = 'spl.public.texto_conclusao_autor',
+  value_format = 'avro'
+);
+
+-- create stream rekeyed
+CREATE STREAM st_texto_conclusao_autor_rekeyed 
+WITH (
+  kafka_topic = 'texto_conclusao_autor_keyed',
+  partitions = 1
+)
+AS 
+  SELECT 
+    * 
+  FROM 
+    st_texto_conclusao_autor
+  PARTITION BY TXT_ID
+;
